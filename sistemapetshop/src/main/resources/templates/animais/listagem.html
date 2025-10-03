@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Animais - PetShop</title>
+    <style>
+        main {
+            padding: 50px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 30px;
+            color: #a165f8;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        input[name="busca"], input[name="raca"] {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            width: 200px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            background-color: #a165f8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #8c4edb;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.07);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px 10px;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #e8e1ff;
+            color: #4b3ca7;
+            font-weight: bold;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f8f5ff;
+        }
+
+        a {
+            color: #4b3ca7;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-excluir {
+            padding: 5px 10px;
+            background-color: #f06262;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-excluir:hover {
+            background-color: #d94f4f;
+        }
+
+        .menu-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #4b3ca7;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #a165f8;
+            border-radius: 8px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .menu-link:hover {
+            background-color: #a165f8;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<main layout:fragment="conteudo">
+    <h1>Lista de Animais</h1>
+
+    <form method="get" th:action="@{/animais/listagem}" class="search-bar">
+        <input name="busca" placeholder="Buscar por nome">
+        <input name="raca" placeholder="Filtrar por raça">
+        <button type="submit" class="btn">Pesquisar</button>
+
+        <a th:href="@{/animais/listagem}" class="btn"
+           th:if="${param.busca != null and param.busca[0].length() > 0} or
+                   ${param.raca != null and param.raca[0].length() > 0}">
+            Mostrar Todos
+        </a>
+
+        <a th:href="@{/animais/formulario}" class="btn">Novo Animal</a>
+    </form>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Raça</th>
+            <th>Idade</th>
+            <th>Cliente</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="an : ${lista}">
+            <td th:text="${an.nome}"></td>
+            <td th:text="${an.raca}"></td>
+            <td th:text="${an.idade}"></td>
+            <td th:text="${an.cliente.nome}"></td>
+            <td>
+                <a th:href="@{/animais/formulario(id=${an.id})}">Editar</a>
+                <form th:action="@{/animais/{id}(id=${an.id})}" method="post" style="display:inline">
+                    <input type="hidden" name="_method" value="delete">
+                    <input class="btn-excluir" type="submit" value="Excluir">
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a class="menu-link" href="/menus/principal">Menu Principal</a>
+</main>
+</body>
+</html>
