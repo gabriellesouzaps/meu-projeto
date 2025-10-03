@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{template.html}"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Atendimento - PetShop</title>
+    <style>
+        main {
+            max-width: 650px;
+            margin: 50px auto;
+            padding: 40px 30px;
+            background-color: #f8f5ff;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #a165f8;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        form div {
+            margin-bottom: 22px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: normal;
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            transition: all 0.2s;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #a165f8;
+            box-shadow: 0 0 8px rgba(161, 101, 248, 0.3);
+            outline: none;
+        }
+
+        input[type="submit"] {
+            padding: 12px 25px;
+            background-color: #a165f8;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #8c4edb;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 500px) {
+            main {
+                padding: 30px 20px;
+            }
+            input[type="submit"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<main layout:fragment="conteudo">
+    <h1>Cadastro de Atendimento</h1>
+    <form method="post" th:action="@{/atendimentos/formulario}">
+        <input type="hidden" name="_method" value="put" th:if="${atendimento!=null}">
+        <input type="hidden" name="id" th:value="${atendimento?.id}">
+
+        <div>
+            <label>Data</label>
+            <input name="dataAtendimento" type="date" th:value="${atendimento?.dataAtendimento}">
+        </div>
+        <div>
+            <label>Descrição</label>
+            <textarea name="descricao" th:text="${atendimento?.descricao}" placeholder="Descreva o atendimento"></textarea>
+        </div>
+        <div>
+            <label>Animal</label>
+            <select name="idAnimal">
+                <option value="">Selecione...</option>
+                <th:block th:each="an : ${listaAnimal}">
+                    <option th:value="${an.id}" th:text="${an.nome}"
+                            th:selected="${atendimento!=null} ? ${atendimento.animal.id == an.id} : false"></option>
+                </th:block>
+            </select>
+        </div>
+        <div>
+            <label>Status</label>
+            <select name="status" th:value="${atendimento?.status}">
+                <option value="Agendado">Agendado</option>
+                <option value="Em andamento">Em andamento</option>
+                <option value="Concluído">Concluído</option>
+                <option value="Cancelado">Cancelado</option>
+            </select>
+        </div>
+
+        <div>
+            <input type="submit" th:value="${atendimento==null} ? 'Cadastrar' : 'Atualizar'">
+        </div>
+    </form>
+</main>
+</body>
+</html>

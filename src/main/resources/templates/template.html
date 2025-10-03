@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetShop</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f5ff;
+            color: #4b3ca7;
+        }
+        header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 50px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+/* Centraliza o logo */
+header .logo {
+    display: flex;          /* lado a lado */
+    align-items: center;    /* centraliza verticalmente */
+    gap: 10px;              /* espaço entre logo e texto */
+    font-weight: bold;
+    font-size: 24px;
+    color: #a165f8;
+}
+
+header .logo img {
+  margin-top: -4px;
+    width: 40px;
+    height: 40px;
+    display: inline-block;  /* garante alinhamento inline */
+    vertical-align: middle; /* alinha ao meio do texto */
+}
+
+/* Links alinhados à direita */
+header nav {
+    margin-left: auto; /* empurra os links para a direita */
+    display: flex;
+    gap: 25px;
+}
+
+header nav a {
+    text-decoration: none;
+    color: #636363;
+    font-weight: 500;
+    font-size: 18px;
+    transition: color 0.3s, background-color 0.3s;
+    padding: 10px 18px;
+    border-radius: 22px;
+}
+
+header nav a:hover, header nav a.active {
+    color: #fff;
+    background-color: #a165f8;
+}
+
+
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">
+        <img th:src="@{/images/pata.png}" alt="Logo" width="30">
+        PetShop Center
+    </div>
+    <nav>
+        <a th:href="@{/menus/principal}">Início</a>
+        <a th:href="@{/clientes/listagem}">Clientes</a>
+        <a th:href="@{/animais/listagem}">Animais</a>
+        <a th:href="@{/atendimentos/listagem}">Atendimentos</a>
+    </nav>
+</header>
+
+<!-- Aqui o conteúdo das páginas será injetado -->
+<main layout:fragment="conteudo"></main>
+
+</body>
+<script>
+    // Pega todos os links do nav
+    const navLinks = document.querySelectorAll('header nav a');
+
+    // Pega a URL atual
+    const currentPath = window.location.pathname;
+
+    navLinks.forEach(link => {
+        // Se o href do link contém a URL atual, adiciona a classe 'active'
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+    });
+</script>
+
+</html>
